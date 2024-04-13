@@ -1,5 +1,8 @@
 import urllib.request
 import os
+import tarfile
+
+# download data
 
 links = [
     'https://nihcc.box.com/shared/static/vfk49d74nhbxq3nqjg0900w5nvkorp5c.gz',
@@ -16,11 +19,24 @@ links = [
 	'https://nihcc.box.com/shared/static/ioqwiy20ihqwyr8pf4c24eazhh281pbu.gz'
 ]
 
+
 download_dir = 'data/'
+if not os.path.exists(download_dir):
+    os.makedirs(download_dir)
+
 for idx, link in enumerate(links):
     fn = 'images_%02d.tar.gz' % (idx+1)
     file_path = os.path.join(download_dir, fn)
     print('Downloading ' + fn + '...')
     urllib.request.urlretrieve(link, file_path)
+    
+    extract_dir = 'data/images/'
+    if not os.path.exists(extract_dir):
+        os.makedirs(extract_dir)
+        
+    # Extract the TAR.GZ file
+    with tarfile.open(file_path, 'r:gz') as tar:
+        tar.extractall(path=extract_dir)
 
 print("Download complete. Please check the checksums")
+
