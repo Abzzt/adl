@@ -20,23 +20,26 @@ links = [
 ]
 
 
-download_dir = 'data/'
+download_dir = 'data/images'
 if not os.path.exists(download_dir):
     os.makedirs(download_dir)
 
 for idx, link in enumerate(links):
-    fn = 'images_%02d.tar.gz' % (idx+1)
-    file_path = os.path.join(download_dir, fn)
-    print('Downloading ' + fn + '...')
-    urllib.request.urlretrieve(link, file_path)
-    
-    extract_dir = 'data/images/'
-    if not os.path.exists(extract_dir):
-        os.makedirs(extract_dir)
+    try:
+        fn = 'images_%02d.tar.gz' % (idx+1)
+        file_path = os.path.join(download_dir, fn)
+        print('Downloading ' + fn + '...')
+        # urllib.request.urlretrieve(link, file_path)
         
-    # Extract the TAR.GZ file
-    with tarfile.open(file_path, 'r:gz') as tar:
-        tar.extractall(path=extract_dir)
+        extract_dir = 'data/images/'
+        if not os.path.exists(extract_dir):
+            os.makedirs(extract_dir)
+            
+        # Extract the TAR.GZ file
+        with tarfile.open(file_path, 'r:gz') as tar:
+            tar.extractall(path=extract_dir)
+    except:
+        pass
 
 print("Download complete. Please check the checksums")
 
