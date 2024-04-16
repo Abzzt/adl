@@ -71,18 +71,15 @@ class CustomDataset(Dataset):
             img_path = self.dataframe.iloc[idx]['path']
             image = Image.open(img_path).convert('RGB')
 
-            # Convert string representation of list to actual list
             # Convert the list of labels to a multi-hot encoded tensor
-            num_classes = len(labels_map)
+            labels = img_path = self.dataframe.iloc[idx]['labels']
             multi_hot_labels = [1 if label in labels else 0 for label in labels_map.values()]
             multi_hot_labels = torch.tensor(multi_hot_labels, dtype=torch.float32)
 
             if self.transform:
                 image = self.transform(image)
-
-            # return image, multi_hot_labels
             
-            return {'image': image, 'labels': multi_hot_labels}
+            return image, multi_hot_labels
         except Exception as e:
             print(f"Error loading data at index {idx}: {e}")
             return None, None 
@@ -96,16 +93,5 @@ img, lab = train_dataset[0] # torch, list types
 
 # Create data loaders
 train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
-valid_loader = DataLoader(valid_dataset, batch_size=1, shuffle=False)
+valid_loader = DataLoader(valid_dataset, batch_size=batch_size, shuffle=False)
 
-print(type(train_loader))
-print(len(train_loader))
-
-
-for i_batch, sample_batched in enumerate(train_loader):
-    print(i_batch, sample_batched['image'],
-          sample_batched['labels'])
-
-for i_batch, sample_batched in enumerate(valid_loader):
-    print(i_batch, sample_batched['image'],
-          sample_batched['labels'])
