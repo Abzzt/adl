@@ -1,5 +1,6 @@
 pandas
-scikit-learn
-tensorflow
+scikit-learn 
 pillow
 torchvision
+torch
+tqdm
