@@ -12,7 +12,7 @@ from torchvision import transforms
 
 
 image_size = 224
-batch_size = 32
+batch_size = 16
 device = torch.device("cuda" if torch.cuda.is_available() else "mps")
 
 bb_pd = pd.read_csv('data/BBox_List_2017.csv', delimiter=',')
@@ -29,13 +29,11 @@ labels_map = {i: label for i, label in enumerate(labels)}
 image_directory = 'data/images/images'
 data_image_paths = {os.path.basename(x): x for x in glob.glob(os.path.join(image_directory, '*.png'))}
 data_entry['path'] = data_entry['Image Index'].map(data_image_paths.get)
+data_entry = data_entry.drop_duplicates()
 df_new = pd.DataFrame(columns=data_entry.columns)
 
 for l in labels:
     df_new = pd.concat([df_new, data_entry[data_entry[l]==1][:500]], ignore_index=True)
-
-df_new = df_new.drop_duplicates()
-
 train_df, valid_df = train_test_split(df_new, test_size=0.20, random_state=2020, stratify=df_new['Finding Labels'].map(lambda x: x[:4]))
 
 train_df.loc[:, 'labels'] = train_df.apply(lambda x: x['Finding Labels'].split('|'), axis=1)
@@ -90,8 +88,9 @@ train_dataset = CustomDataset(train_df, transform=transform_data)
 valid_dataset = CustomDataset(valid_df, transform=transform_data)
 
 img, lab = train_dataset[0] # torch, list types
+print(len(train_dataset), len(valid_dataset))
 
 # Create data loaders
-train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
-valid_loader = DataLoader(valid_dataset, batch_size=batch_size, shuffle=False)
+train_loader = DataLoader(train_dataset, batch_size=8, shuffle=True)
+valid_loader = DataLoader(valid_dataset, batch_size=8, shuffle=False)
 
