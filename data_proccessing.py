@@ -36,6 +36,7 @@ for l in labels:
     df_new = pd.concat([df_new, data_entry[data_entry[l]==1][:500]], ignore_index=True)
 train_df, valid_df = train_test_split(df_new, test_size=0.20, random_state=2020, stratify=df_new['Finding Labels'].map(lambda x: x[:4]))
 
+
 train_df.loc[:, 'labels'] = train_df.apply(lambda x: x['Finding Labels'].split('|'), axis=1)
 valid_df.loc[:, 'labels'] = valid_df.apply(lambda x: x['Finding Labels'].split('|'), axis=1)
 
@@ -69,26 +70,16 @@ class CustomDataset(Dataset):
             img_path = self.dataframe.iloc[idx]['path']
             image = Image.open(img_path).convert('RGB')
 
-            # Convert the list of labels to a multi-hot encoded tensor
+            img_labels = self.dataframe.iloc[idx]['labels']
+            # C Convert the list of labels to a multi-hot encoded tensor
             labels = img_path = self.dataframe.iloc[idx]['labels']
             multi_hot_labels = [1 if label in labels else 0 for label in labels_map.values()]
             multi_hot_labels = torch.tensor(multi_hot_labels, dtype=torch.float32)
-            # class_indices = []
-            # for sample_labels in labels:
-            #     sample_indices = [labels_map[label] for label in sample_labels]
-            #     class_indices.append(sample_indices)
-
-            # # Convert the list of lists to a 1D tensor
-            # class_indices = [torch.tensor(indices) for indices in class_indices]
-
-            # # Stack the list of tensors to create a single tensor
-            # class_indices = torch.stack(class_indices)
 
             if self.transform:
                 image = self.transform(image)
             
             return image, multi_hot_labels
-        
         except Exception as e:
             print(f"Error loading data at index {idx}: {e}")
             return None, None 
@@ -102,6 +93,6 @@ img, lab = train_dataset[0] # torch, list types
 print(len(train_dataset), len(valid_dataset))
 
 # Create data loaders
-train_loader = DataLoader(train_dataset, batch_size=8, shuffle=True)
-valid_loader = DataLoader(valid_dataset, batch_size=8, shuffle=False)
+train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
+valid_loader = DataLoader(valid_dataset, batch_size=batch_size, shuffle=False)
 

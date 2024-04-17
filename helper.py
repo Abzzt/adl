@@ -3,6 +3,7 @@ import torch
 def train(model, train_loader, optimizer, criterion, device):
     model.train()
     epoch_train_loss = 0.0
+    i = 0
     for images, labels in train_loader:
         images, labels = images.to(device), torch.tensor(labels).to(device)
         optimizer.zero_grad()
@@ -11,6 +12,7 @@ def train(model, train_loader, optimizer, criterion, device):
         loss.backward()
         optimizer.step()
         epoch_train_loss += loss.item()
+        i+=1
         
     return (epoch_train_loss / len(train_loader))
 
