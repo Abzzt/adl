@@ -33,7 +33,7 @@ data_entry = data_entry.drop_duplicates()
 df_new = pd.DataFrame(columns=data_entry.columns)
 
 for l in labels:
-    df_new = pd.concat([df_new, data_entry[data_entry[l]==1][:500]], ignore_index=True)
+    df_new = pd.concat([df_new, data_entry[data_entry[l]==1][:300]], ignore_index=True)
 # train_df, valid_df = train_test_split(df_new, test_size=0.20, random_state=2020, stratify=df_new['Finding Labels'].map(lambda x: x[:4]))
 data_df, test_df = train_test_split(df_new, test_size=0.20, random_state=2020, stratify=df_new['Finding Labels'].map(lambda x: x[:4]) )
 train_df, valid_df  = train_test_split(data_df, test_size=0.2, random_state=2020,stratify=df_new['Finding Labels'].map(lambda x: x[:4]))
@@ -88,11 +88,14 @@ class CustomDataset(Dataset):
 # Create datasets
 train_dataset = CustomDataset(train_df, transform=transform_data)
 valid_dataset = CustomDataset(valid_df, transform=transform_data)
+test_dataset = CustomDataset(test_df, transform=transform_data)
+
 
 img, lab = train_dataset[0] # torch, list types
 print(len(train_dataset), len(valid_dataset))
 
 # Create data loaders
-train_loader = DataLoader(train_dataset, batch_size=8, shuffle=True)
-valid_loader = DataLoader(valid_dataset, batch_size=8, shuffle=False)
+train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
+valid_loader = DataLoader(valid_dataset, batch_size=batch_size, shuffle=False)
+test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
 
