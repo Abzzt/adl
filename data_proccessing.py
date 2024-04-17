@@ -25,6 +25,7 @@ for label in labels:
         data_entry[label] = data_entry['Finding Labels'].map(lambda finding: 1.0 if label in finding else 0.0)
         
 labels_map = {i: label for i, label in enumerate(labels)}
+print(labels)
 # looks for files with names matching
 image_directory = 'data/images/images'
 data_image_paths = {os.path.basename(x): x for x in glob.glob(os.path.join(image_directory, '*.png'))}
@@ -40,6 +41,7 @@ train_df, valid_df  = train_test_split(data_df, test_size=0.2, random_state=2020
 
 train_df.loc[:, 'labels'] = train_df.apply(lambda x: x['Finding Labels'].split('|'), axis=1)
 valid_df.loc[:, 'labels'] = valid_df.apply(lambda x: x['Finding Labels'].split('|'), axis=1)
+test_df.loc[:, 'labels'] = test_df.apply(lambda x: x['Finding Labels'].split('|'), axis=1)
 
 
 # Define transforms
@@ -100,3 +102,4 @@ train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
 valid_loader = DataLoader(valid_dataset, batch_size=batch_size, shuffle=False)
 test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
 
+print(len(train_dataset), len(valid_dataset), len(test_dataset))
