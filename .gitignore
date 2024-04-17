@@ -1,5 +1,3 @@
 data/images/*
 /venv/*
 venv/*
-/models/*
-models/*
