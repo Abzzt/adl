@@ -4,7 +4,7 @@ def train(model, train_loader, optimizer, criterion, device):
     model.train()
     epoch_train_loss = 0.0
     for images, labels in train_loader:
-        images, labels = images.to(device), labels.to(device)
+        images, labels = images.to(device), torch.tensor(labels).to(device)
         optimizer.zero_grad()
         outputs = model(images)
         loss = criterion(outputs, labels)
