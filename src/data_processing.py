@@ -11,12 +11,15 @@ import pandas as pd
 from torchvision import transforms
 
 
-image_size = 224
+
 batch_size = 16
 device = torch.device("cuda" if torch.cuda.is_available() else "mps")
 
-bb_pd = pd.read_csv('../input/BBox_List_2017.csv', delimiter=',')
-data_entry = pd.read_csv('../input/Data_Entry_2017_v2020.csv', delimiter=',')
+current_directory = os.getcwd()
+parent_directory = os.path.dirname(current_directory)
+relative_parent_path = os.path.relpath(parent_directory)
+data_path = os.path.join(relative_parent_path, 'input/Data_Entry_2017_v2020.csv')
+data_entry = pd.read_csv(data_path, delimiter=',')
 
 labels = np.unique(list(chain(*data_entry['Finding Labels'].map(lambda x: x.split('|')).tolist())))
 labels = [x for x in labels if len(x) > 0]
@@ -25,37 +28,24 @@ for label in labels:
         data_entry[label] = data_entry['Finding Labels'].map(lambda finding: 1.0 if label in finding else 0.0)
         
 labels_map = {i: label for i, label in enumerate(labels)}
-print(labels)
+
 # looks for files with names matching
-image_directory = '../input/images/images'
-data_image_paths = {os.path.basename(x): x for x in glob.glob(os.path.join(image_directory, '*.png'))}
+data_image_paths = {os.path.basename(x): x for x in glob.glob(os.path.join('input/images/images', '*.png'))}
 data_entry['path'] = data_entry['Image Index'].map(data_image_paths.get)
+
+#  drop duplicates
 data_entry = data_entry.drop_duplicates()
 df_new = pd.DataFrame(columns=data_entry.columns)
 
 for l in labels:
     df_new = pd.concat([df_new, data_entry[data_entry[l]==1][:300]], ignore_index=True)
-# train_df, valid_df = train_test_split(df_new, test_size=0.20, random_state=2020, stratify=df_new['Finding Labels'].map(lambda x: x[:4]))
+
 data_df, test_df = train_test_split(df_new, test_size=0.20, random_state=2020, stratify=df_new['Finding Labels'].map(lambda x: x[:4]))
 train_df, valid_df  = train_test_split(data_df, test_size=0.2, random_state=2020,stratify=data_df['Finding Labels'].map(lambda x: x[:4]))
 
 train_df.loc[:, 'labels'] = train_df.apply(lambda x: x['Finding Labels'].split('|'), axis=1)
 valid_df.loc[:, 'labels'] = valid_df.apply(lambda x: x['Finding Labels'].split('|'), axis=1)
 test_df.loc[:, 'labels'] = test_df.apply(lambda x: x['Finding Labels'].split('|'), axis=1)
-
-
-# Define transforms
-train_transform = transforms.Compose([
-   transforms.Resize((image_size, image_size)),
-    transforms.RandomHorizontalFlip(),
-    transforms.RandomRotation(10),
-    transforms.ToTensor(),
-])
-
-valid_transform = transforms.Compose([
-    transforms.Resize((image_size, image_size)),
-    transforms.ToTensor(),
-])
 
 transform_data = transforms.Compose([transforms.ToTensor(),
                           transforms.Normalize((0.1307,), (0.3081,))])
@@ -81,25 +71,18 @@ class CustomDataset(Dataset):
 
             if self.transform:
                 image = self.transform(image)
-            
             return image, multi_hot_labels
+        
         except Exception as e:
             print(f"Error loading data at index {idx}: {e}")
             return None, None 
-
 
 # Create datasets
 train_dataset = CustomDataset(train_df, transform=transform_data)
 valid_dataset = CustomDataset(valid_df, transform=transform_data)
 test_dataset = CustomDataset(test_df, transform=transform_data)
 
-
-img, lab = train_dataset[0] # torch, list types
-print(len(train_dataset), len(valid_dataset))
-
 # Create data loaders
 train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
 valid_loader = DataLoader(valid_dataset, batch_size=batch_size, shuffle=False)
 test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
-
-print(len(train_dataset), len(valid_dataset), len(test_dataset))
