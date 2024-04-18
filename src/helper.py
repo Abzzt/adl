@@ -71,10 +71,10 @@ def test(model, test_loader, criterion, device, num_classes):
                         
                     total_label[label] += 1
 
-    precision = {label: true_positives[label] / (true_positives[label] + false_positives[label]) if (true_positives[label] + false_positives[label]) != 0 else 0 for label in range(14)}
-    recall = {label: true_positives[label] / (true_positives[label] + false_negatives[label]) if (true_positives[label] + false_negatives[label]) != 0 else 0 for label in range(14)}
-    accuracy = {label: (true_positives[label] + true_negatives[label]) / total_label[label] if (true_positives[label] + true_negatives[label]) != 0 else 0 for label in range(14)}
-    f1 = {label: 2 * precision[label] * recall[label] / (precision[label] + recall[label]) if (precision[label] + recall[label]) != 0 else 0 for label in range(14)}
+    precision = {label: true_positives[label] / (true_positives[label] + false_positives[label]) if (true_positives[label] + false_positives[label]) != 0 else 0 for label in range(num_classes)}
+    recall = {label: true_positives[label] / (true_positives[label] + false_negatives[label]) if (true_positives[label] + false_negatives[label]) != 0 else 0 for label in range(num_classes)}
+    accuracy = {label: (true_positives[label] + true_negatives[label]) / total_label[label] if (true_positives[label] + true_negatives[label]) != 0 else 0 for label in range(num_classes)}
+    f1 = {label: 2 * precision[label] * recall[label] / (precision[label] + recall[label]) if (precision[label] + recall[label]) != 0 else 0 for label in range(num_classes)}
     
     precision_df = pd.DataFrame.from_dict(precision, orient='index', columns=['Precision'])
     accuracy_df = pd.DataFrame.from_dict(accuracy, orient='index', columns=['Accuracy'])
