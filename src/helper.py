@@ -14,15 +14,6 @@ def train(model, train_loader, optimizer, criterion, device):
         loss = criterion(outputs, labels)
         loss.backward()
         optimizer.step()
-
-
-        # outputs_binary = torch.where(outputs >= threshold, torch.tensor(1, device=outputs.device), torch.tensor(0, device=outputs.device))
-
-        # print("outputs", outputs_binary)
-
-        # total += labels.size(0)
-        # correct += (outputs_binary == labels).sum().item()
-        # correct = torch.sum(torch.eq(labels, outputs_binary).all(dim=1)).item()
         
         epoch_train_loss += loss.item()
 
@@ -46,16 +37,16 @@ def evaluate(model, valid_loader, criterion, device):
 
     return valid_loss
 
-def test(model, test_loader, criterion, device):
+def test(model, test_loader, criterion, device, num_classes):
     # Evaluate the model on the test dataset
     model.eval()
     test_loss = 0
     threshold = 0.5
-    total_label = {label: 0 for label in range(14)}
-    true_positives = {label: 0 for label in range(14)}
-    true_negatives = {label: 0 for label in range(14)}
-    false_positives = {label: 0 for label in range(14)}
-    false_negatives = {label: 0 for label in range(14)}
+    total_label = {label: 0 for label in range(num_classes)}
+    true_positives = {label: 0 for label in range(num_classes)}
+    true_negatives = {label: 0 for label in range(num_classes)}
+    false_positives = {label: 0 for label in range(num_classes)}
+    false_negatives = {label: 0 for label in range(num_classes)}
     losses = []
 
     with torch.no_grad():
@@ -67,9 +58,7 @@ def test(model, test_loader, criterion, device):
             losses.append(loss.item())
             outputs_binary = torch.where(outputs >= threshold, torch.tensor(1, device=outputs.device), torch.tensor(0, device=outputs.device))
 
-            for label in range(14):
-           
-                correct = 0
+            for label in range(num_classes):
                 for output, true_label in zip(outputs_binary[:, label], labels[:, label]):
                     if output.item() == 1 and true_label.item() == 1:
                         true_positives[label] += 1
@@ -97,26 +86,6 @@ def test(model, test_loader, criterion, device):
 
 
     return metrics_df, sum(losses) / len(losses)
-
-
-def visualise_loss(loss_file):
-    # Load the loss data from the file
-    train_loss = torch.load(loss_file)
-
-    # Plot the loss
-    for learning_rate, losses in train_loss.items():
-        epochs = range(1, len(losses) + 1)
-        plt.plot(epochs, losses, label=f"Learning Rate: {learning_rate}")
-
-    # Add labels and legend
-    plt.xlabel("Epoch")
-    plt.ylabel("Loss")
-    plt.title("Loss vs. Epoch for Different Learning Rates")
-    plt.legend()
-    plt.grid(True)
-    plt.show()
-
-# visualise_loss('models/resnet_final/valid_losses.pt')
 
 
 def visualise_all_loss(train_loss_file, val_loss_file):
