@@ -15,8 +15,8 @@ image_size = 224
 batch_size = 16
 device = torch.device("cuda" if torch.cuda.is_available() else "mps")
 
-bb_pd = pd.read_csv('data/BBox_List_2017.csv', delimiter=',')
-data_entry = pd.read_csv('data/Data_Entry_2017_v2020.csv', delimiter=',')
+bb_pd = pd.read_csv('../input/BBox_List_2017.csv', delimiter=',')
+data_entry = pd.read_csv('../input/Data_Entry_2017_v2020.csv', delimiter=',')
 
 labels = np.unique(list(chain(*data_entry['Finding Labels'].map(lambda x: x.split('|')).tolist())))
 labels = [x for x in labels if len(x) > 0]
@@ -27,7 +27,7 @@ for label in labels:
 labels_map = {i: label for i, label in enumerate(labels)}
 print(labels)
 # looks for files with names matching
-image_directory = 'data/images/images'
+image_directory = '../input/images/images'
 data_image_paths = {os.path.basename(x): x for x in glob.glob(os.path.join(image_directory, '*.png'))}
 data_entry['path'] = data_entry['Image Index'].map(data_image_paths.get)
 data_entry = data_entry.drop_duplicates()

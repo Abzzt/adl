@@ -116,4 +116,27 @@ def visualise_loss(loss_file):
     plt.grid(True)
     plt.show()
 
-visualise_loss('models/resnet_final/valid_losses.pt')
+# visualise_loss('models/resnet_final/valid_losses.pt')
+
+
+def visualise_all_loss(train_loss_file, val_loss_file):
+    # Load the training loss data
+    train_loss_data = torch.load(train_loss_file)
+    
+    # Load the validation loss data
+    val_loss_data = torch.load(val_loss_file)
+
+    # Plot the loss
+    for learning_rate, train_losses in train_loss_data.items():
+        val_losses = val_loss_data[learning_rate]
+        epochs = range(1, len(train_losses) + 1)
+        plt.plot(epochs, train_losses, label=f"Train LR: {learning_rate}")
+        plt.plot(epochs, val_losses, label=f"Validation LR: {learning_rate}", linestyle='--')
+
+    # Add labels and legend
+    plt.xlabel("Epoch")
+    plt.ylabel("Loss")
+    plt.title("Training and Validation Loss vs. Epoch for Different Learning Rates")
+    plt.legend()
+    plt.grid(True)
+    plt.show()
