@@ -20,6 +20,6 @@ The notebooks used to run the models, as well as the model definitions themselve
 
 Within the ./notebook folder, we have also included a folder of models which we failed to run for this project.       
 
-### Trained models       
+### Loading Trained Models       
 The models we trained can be found here (insert link). We have included the saved Pytorch model weights as well as the training and validation losses which we have presented in our report. To reproduce the results, please save the desired model to the ./model folder in the root directory and navigate to the corresponding model notebook in the ./model directory. From there, run the testing code found in the notebook.       
 
