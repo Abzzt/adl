@@ -1,3 +1,4 @@
-data/images/*
+input/images/*
 /venv/*
 venv/*
+__pycache__/*
