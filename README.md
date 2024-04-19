@@ -61,5 +61,5 @@ Data Exploration:
    
 
 ### Loading Trained Models       
-The models we trained can be found here (insert link). We have included the saved Pytorch model weights as well as the training and validation losses which we have presented in our report. To reproduce the results, please save the desired model to the ./model folder in the root directory and navigate to the corresponding model notebook in the ./model directory. From there, run the testing code found in the notebook.       
+The models we trained can be found [here](https://drive.google.com/drive/folders/13Bj80AKrLALYRXMmSPRb4NUXGj9BHpry?usp=sharing). We have included the saved Pytorch model weights as well as the training and validation losses which we have presented in our report. To reproduce the results, please save the desired model to the ./models folder in the root directory and navigate to the corresponding model notebook in the ./notebooks directory. From there, run the testing code found in the notebook.       
 
