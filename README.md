@@ -36,8 +36,8 @@ We highly recommend that you have CUDA installed on your system. You can follow 
 The dataset used in this project is the [NIH Chest X-ray Dataset of 14 Common Thorax Disease Categories](https://nihcc.app.box.com/v/ChestXray-NIHCC/folder/36938765345). To download the dataset, please run the ./src/download_data.py file. You will need about 42GB of space to download the entire dataset.         
 
 ## Run the Models
-The notebooks used to run the models, as well as the definitions themselves are located in the /notebooks/ directory. The notebooks are split by the different models and are named as such: 
-AlexNet.ipynb contains our implementation of the state-of-the-art AlexNet model
+The notebooks used to run the models, as well as the definitions themselves are located in the ./notebooks directory. The notebooks are split by the different models and are named as such: 
+AlexNet.ipynb contains our implementation of the AlexNet model
 AlexNet_variation.ipynb contains our implementation of our custom AlexNet model
 
 All the notebooks contain both training and evaluation sections and parameters for each model can be adjusted within the notebooks themselves.
