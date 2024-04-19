@@ -32,10 +32,10 @@ pip install -r requirements.txt
 ### CUDA
 We highly recommend that you have CUDA installed on your system. You can follow the instructions provided in the PyTorch documentation [here](https://pytorch.org/get-started/locally/).
 
-### Download Dataset
+## Download Dataset
 The dataset used in this project is the [NIH Chest X-ray Dataset of 14 Common Thorax Disease Categories](https://nihcc.app.box.com/v/ChestXray-NIHCC/folder/36938765345). To download the dataset, please run the ./src/download_data.py file. You will need about 42GB of space to download the entire dataset.         
 
-### Run the Models
+## Run the Models
 The notebooks used to run the models, as well as the definitions themselves are located in the /notebooks/ directory. The notebooks are split by the different models and are named as such: 
 AlexNet.ipynb contains our implementation of the state-of-the-art AlexNet model
 AlexNet_variation.ipynb contains our implementation of our custom AlexNet model
@@ -60,6 +60,6 @@ Data Exploration:
 - exploration
    
 
-### Loading Trained Models       
+## Loading Trained Models       
 The models we trained can be found [here](https://drive.google.com/drive/folders/13Bj80AKrLALYRXMmSPRb4NUXGj9BHpry?usp=sharing). We have included the saved Pytorch model weights as well as the training and validation losses which we have presented in our report. To reproduce the results, please save the desired model to the ./models folder in the root directory and navigate to the corresponding model notebook in the ./notebooks directory. From there, run the testing code found in the notebook.       
 
