@@ -21,5 +21,5 @@ The notebooks used to run the models, as well as the model definitions themselve
 Within the ./notebook folder, we have also included a folder of models which we failed to run for this project.       
 
 ### Loading Trained Models       
-The models we trained can be found [here] (https://drive.google.com/drive/folders/13Bj80AKrLALYRXMmSPRb4NUXGj9BHpry?usp=sharing). We have included the saved Pytorch model weights as well as the training and validation losses which we have presented in our report. To reproduce the results, please save the desired model to the ./model folder in the root directory and navigate to the corresponding model notebook in the ./model directory. From there, run the testing code found in the notebook.       
+The models we trained can be found [here](https://drive.google.com/drive/folders/13Bj80AKrLALYRXMmSPRb4NUXGj9BHpry?usp=sharing). We have included the saved Pytorch model weights as well as the training and validation losses which we have presented in our report. To reproduce the results, please save the desired model to the ./models folder in the root directory and navigate to the corresponding model notebook in the ./notebooks directory. From there, run the testing code found in the notebook.       
 
