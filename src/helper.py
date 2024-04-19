@@ -16,7 +16,6 @@ def train(model, train_loader, optimizer, criterion, device):
         
         epoch_train_loss += loss.item()
 
-    # train_accuracy = 100 * correct / total
     return (epoch_train_loss / len(train_loader))
 
 def evaluate(model, valid_loader, criterion, device):
